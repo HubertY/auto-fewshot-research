@@ -1,0 +1,6 @@
+Sampling Strategy Performance, Abridged Dataset (N = 29)
+x pass@any pass@1 pass@10 pass@100 costn cost
+codegen_pmass & 1.0000 & 0.2703 & 0.6813 & 0.9484 & 36.0283 & 9332.6897\\
+codegen_answerkey & 1.0000 & 0.1834 & 0.5877 & 0.9329 & 51.6460 & 10329.2069\\
+codegen_vanilla & 1.0000 & 0.1772 & 0.5502 & 0.8921 & 51.0910 & 10218.2069\\
+codegen_lowt & 0.7586 & 0.4272 & 0.6096 & 0.7192 & 13.2626 & 2652.5172\\

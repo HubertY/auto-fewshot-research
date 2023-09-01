@@ -1,0 +1,5 @@
+.venv
+bloom
+__pycache__
+oldresults
+data/
