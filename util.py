@@ -1,6 +1,8 @@
 import numpy as np
 import os
 import json
+import matplotlib
+import matplotlib.pyplot as plt
 
 
 def listdir(path):
@@ -99,3 +101,26 @@ def measure(data, metrics={}):
                for metric in metrics.keys()} for k, v in data.items()}
 
     return ret
+
+
+def plotterino(data, xlabel, ylabel, path, title, xvals=None, legend=None, ticksize=None):
+    # Plotting the scores
+    for datum in data:
+        plt.plot(xvals if xvals else [
+                 i for i in range(len(datum))], datum, marker='o')
+
+    # Labeling the axes
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    ax = plt.gca()
+    if xvals is None:
+        ax.axes.xaxis.set_ticklabels([])
+    if ticksize:
+        ax.axes.xaxis.set_tick_params(labelsize=ticksize)
+    plt.title(title)
+
+    # Show the plot
+    if legend:
+        plt.legend(legend)
+    plt.savefig(path)
+    plt.clf()

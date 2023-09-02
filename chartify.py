@@ -1,5 +1,5 @@
-from util import correctness_stats, measure, pass_at_k, listdir
-import matplotlib.pyplot as plt
+from util import correctness_stats, measure, pass_at_k, listdir, plotterino
+
 
 from util import open_file
 
@@ -22,22 +22,7 @@ def plot_scores(students_scores, path, datapoints=None, legend=None, xlabel="", 
     sorted_scores = [[student[i] for i in sorted_indexes]
                      for student in students_scores]
 
-    # Plotting the scores
-    for student_scores in sorted_scores:
-        plt.plot(question_labels, student_scores, marker='o')
-
-    # Labeling the axes
-    plt.xlabel(xlabel)
-    plt.ylabel(ylabel)
-    ax = plt.gca()
-    ax.axes.xaxis.set_ticklabels([])
-    plt.title(title)
-
-    # Show the plot
-    if legend:
-        plt.legend(legend)
-    plt.savefig(path)
-    plt.clf()
+    plotterino(sorted_scores, xlabel, ylabel, path, title, None, legend)
 
 
 def fmt(i):
@@ -142,7 +127,7 @@ def main():
     data, probs = correctness_stats(["data/codegen_pmass"], include=kernel)
     data = data["data/codegen_pmass"]
     stats = {p: {"cost": v[2], "n": v[1], "c": v[0],
-                 "selected": 4 if v[0] > 4 else v[0]} for (p, v) in data.items()}
+                 "selected": 8 if v[0] > 8 else v[0]} for (p, v) in data.items()}
     chartify(stats, title=f"Prompt Proposal Phase",
              first_label="problem", in_labels=kernel, path="charts/chart6.txt")
 
