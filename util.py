@@ -1,7 +1,6 @@
 import numpy as np
 import os
 import json
-import matplotlib
 import matplotlib.pyplot as plt
 
 
@@ -74,7 +73,7 @@ def correctness_stats(folders=[], include=None, exclude=None, union=False):
 
 
 def mean(l):
-    return sum(l)/len(l)
+    return sum(l)/len(l) if len(l) else 0
 
 
 def measure(data, metrics={}):
@@ -105,9 +104,16 @@ def measure(data, metrics={}):
 
 def plotterino(data, xlabel, ylabel, path, title, xvals=None, legend=None, ticksize=None):
     # Plotting the scores
-    for datum in data:
-        plt.plot(xvals if xvals else [
-                 i for i in range(len(datum))], datum, marker='o')
+    if isinstance(data, dict):
+        for k in data:
+            alpha = 1/len(data[k])
+            alpha = 0.3 if alpha < 0.3 else alpha
+
+            plt.plot([k for _ in data[k]], data[k], "o", alpha=alpha)
+    else:
+        for datum in data:
+            plt.plot(xvals if xvals else [
+                i for i in range(len(datum))], datum, marker='o')
 
     # Labeling the axes
     plt.xlabel(xlabel)

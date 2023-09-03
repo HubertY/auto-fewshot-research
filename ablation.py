@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 from util import correctness_stats, measure, pass_at_k, listdir
 from util import plotterino
 
@@ -46,11 +47,11 @@ def increment_counter(ctr, key):
 
 def main():
     chartdata = []
-    avgs = {}
-    Ns = [4, 5, 6, 7, 8]
+    scores = {}
+    Ns = [1, 2, 3, 4, 5, 6, 7]
     for n in Ns:
         print(n)
-        avgs[n] = 0
+        scores[n] = []
         counter = new_counter(10)
         for subkernel in permutify(kernel, n):
             data, probs = correctness_stats(
@@ -59,15 +60,49 @@ def main():
             stats = [(k, stats[k]["pass@1"])for k in stats]
             stats.sort(key=lambda a: a[1], reverse=True)
             increment_counter(counter, stats[0][0][24:])
-            avgs[n] += _stats[stats[0][0]]["pass@1"]
+            scores[n].append(_stats[stats[0][0]]["pass@1"])
         print(counter)
         vals = counter.values()
         valsum = sum(vals)
         chartdata.append([val/valsum for val in vals])
-        avgs[n] /= valsum
     plotterino(chartdata, "prompt", "top-rank rate", "ablation.png", "Top-ranked Prompt Distribution under Input Ablation",
                [k.replace("/", "-") for k in counter.keys()], legend=[f"N={n}" for n in Ns], ticksize=9)
-    print(avgs)
+    scores[0] = [0.3079]
+    scores[8] = [0.3575744743842625]
+    plotterino(scores, "Input Size (N)", "pass@1 score",
+               "ablation2.png", "Selection Phase Score Distribution of Selected Prompt under Input Ablation", scores.keys())
+
+
+partialstat = {0: 0.3079,
+               2: 0.3205017692244429,
+               3: 0.3323557535734997,
+               4: 0.34015109622821427,
+               5: 0.34419946828908765,
+               6: 0.34963226382931323,
+               7: 0.35447447532494314,
+               8: 0.3575744743842625}
+
+
+def scatter(data, xlabel, ylabel, path, title, xvals=None, legend=None, ticksize=None):
+    # Plotting the scores
+    for datum in data:
+        plt.scatter([], [], marker='o')
+
+    # Labeling the axes
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    ax = plt.gca()
+    if xvals is None:
+        ax.axes.xaxis.set_ticklabels([])
+    if ticksize:
+        ax.axes.xaxis.set_tick_params(labelsize=ticksize)
+    plt.title(title)
+
+    # Show the plot
+    if legend:
+        plt.legend(legend)
+    plt.savefig(path)
+    plt.clf()
 
 
 main()
